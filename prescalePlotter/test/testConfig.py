@@ -1,7 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 
-from Configuration.StandardSequences.Eras import eras
-process = cms.Process('TEST')
+from Configuration.Eras.Modifier_ctpps_2018_cff import ctpps_2018
+from Configuration.ProcessModifiers.run2_miniAOD_UL_cff import run2_miniAOD_UL
+process = cms.Process('TEST', ctpps_2018, run2_miniAOD_UL)
 #process = cms.Process('TEST', eras.Run2_$year, eras.run2_miniAOD_devel)
 
 from conditions import *
@@ -33,13 +34,16 @@ process.MessageLogger = cms.Service("MessageLogger",
   statistics = cms.untracked.vstring(),
   destinations = cms.untracked.vstring("cout"),
   cout = cms.untracked.PSet(
-    threshold = cms.untracked.string("WARNING")
+    threshold = cms.untracked.string("INFO")
   )
 )
 
 # raw data source
 process.source = cms.Source("PoolSource",
-  fileNames = cms.untracked.vstring("file:/afs/cern.ch/work/m/maaraujo/public/output/output_Cal.root"),
+  fileNames = cms.untracked.vstring(
+    "file:/afs/cern.ch/work/m/maaraujo/public/output/output_Cal.root"
+    # "root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/4E7ABE07-FE4C-E811-9395-FA163EC5FAA0.root"
+    ),
 
   # inputCommands = cms.untracked.vstring(
   #   'drop *',
@@ -106,6 +110,7 @@ process.options = cms.PSet(
 
 # Prescale plotter
 process.load("PPSTools.prescalePlotter.prescalePlotter_cfi")
+process.prescalePlotter.processName = cms.string("HLTX")
 
 # processing sequences
 process.path = cms.Path(

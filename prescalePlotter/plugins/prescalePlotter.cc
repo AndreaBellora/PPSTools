@@ -48,7 +48,7 @@ public:
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 private:
-  void endRun(edm::Run const &, edm::EventSetup const &) override;
+  void endRun(edm::Run const&, edm::EventSetup const&) override;
   void beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup) override;
   void analyze(const edm::Event&, const edm::EventSetup&) override;
 
@@ -65,15 +65,16 @@ prescalePlotter::prescalePlotter(const edm::ParameterSet& iConfig)
 
 prescalePlotter::~prescalePlotter() = default;
 
-void prescalePlotter::endRun(edm::Run const &, edm::EventSetup const &) {}
+void prescalePlotter::endRun(edm::Run const&, edm::EventSetup const&) {}
 
 // ------------ method called for each event  ------------
 void prescalePlotter::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
   using namespace edm;
+  using namespace std;
 
   const std::pair<int, int> prescales(hltPrescaleProvider_.prescaleValues(iEvent, iSetup, triggerName_));
   LogInfo("PPS") << "prescalePlotter::analyzeTrigger: path " << triggerName_ << " "
-                 << "prescales L1T,HLT: " << prescales.first << "," << prescales.second << endl;
+                 << "prescales L1T,HLT: " << prescales.first << "," << prescales.second;
 }
 
 void prescalePlotter::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup) {
@@ -105,7 +106,7 @@ void prescalePlotter::fillDescriptions(edm::ConfigurationDescriptions& descripti
   edm::ParameterSetDescription desc;
   desc.add<std::string>("processName", "HLTX");
   desc.add<std::string>("triggerName", "HLT_CTPPSFilter_v2");
-  desc.add<unsigned int>("stageL1Trigger", 1);
+  desc.add<unsigned int>("stageL1Trigger", 2);
   descriptions.add("prescalePlotter", desc);
 }
 
